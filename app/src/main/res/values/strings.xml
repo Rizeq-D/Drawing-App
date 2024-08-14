@@ -6,4 +6,6 @@
     <string name="save">Save</string>
     <string name="clear">Clear</string>
     <string name="fill">Fill</string>
+    <string name="fill_screen">Fill Screen</string>
+    <string name="brush">Brush</string>
 </resources>

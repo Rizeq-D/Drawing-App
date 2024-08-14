@@ -163,74 +163,108 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#0000FF" />
-
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:padding="16dp"
-        android:gravity="end">
 
-        <SeekBar
-            android:id="@+id/brushSizeSeekBar"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="10" />
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true">
 
-        <Button
-            android:id="@+id/fillButton"
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <SeekBar
+                    android:id="@+id/brushSizeSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="10" />
+
+                <Button
+                    android:id="@+id/button_brush"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/brush"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/fill"
-            android:layout_marginStart="8dp" />
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:padding="16dp"
+            android:gravity="end"
+            android:layout_marginBottom="40dp">
 
+            <Button
+                android:id="@+id/fillButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fill"
+                android:layout_marginStart="8dp" />
 
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/clearButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear"
+                android:layout_marginStart="8dp" />
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:layout_marginStart="8dp" />
+
+            <Button
+                android:id="@+id/fillScreenButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fill_screen"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/clear"
-            android:layout_marginEnd="16dp" />
+            android:orientation="horizontal"
+            android:layout_gravity="top"
+            android:gravity="center"
+            android:padding="8dp"
+            android:layout_marginTop="60dp">
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/circle" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="top"
-        android:gravity="center"
-        android:padding="8dp"
-        android:layout_marginTop="80dp">
+            <Button
+                android:id="@+id/rectangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rectangle"
+                android:layout_marginStart="8dp" />
 
-        <Button
-            android:id="@+id/drawCircle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/circle" />
-
-        <Button
-            android:id="@+id/drawRectangle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rectangle"
-            android:layout_marginStart="8dp" />
-
-        <Button
-            android:id="@+id/drawTriangle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/triangle"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
-</FrameLayout>
+            <Button
+                android:id="@+id/triangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/triangle"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </FrameLayout>

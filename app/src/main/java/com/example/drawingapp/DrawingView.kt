@@ -2,8 +2,12 @@ package com.example.drawingapp
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
-import android.os.Environment
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Point
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -46,8 +50,6 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
         drawPaint.style = Paint.Style.STROKE
         drawPaint.strokeJoin = Paint.Join.ROUND
         drawPaint.strokeCap = Paint.Cap.ROUND
-
-        canvasPaint = Paint(Paint.DITHER_FLAG)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -61,26 +63,24 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
         canvas.drawBitmap(canvasBitmap!!, 0f, 0f, canvasPaint)
 
         when (currentShape) {
-            Shape.FREE_DRAW -> {
-                canvas.drawPath(drawPath, drawPaint)
-            }
+            Shape.FREE_DRAW -> canvas.drawPath(drawPath, drawPaint)
             Shape.CIRCLE -> {
                 val radius = Math.hypot((endX - startX).toDouble(), (endY - startY).toDouble()).toFloat()
                 canvas.drawCircle(startX, startY, radius, drawPaint)
             }
-            Shape.RECTANGLE -> {
-                canvas.drawRect(startX, startY, endX, endY, drawPaint)
-            }
+            Shape.RECTANGLE -> canvas.drawRect(startX, startY, endX, endY, drawPaint)
             Shape.TRIANGLE -> {
-                val path = Path()
-                path.moveTo((startX + endX) / 2, startY)
-                path.lineTo(startX, endY)
-                path.lineTo(endX, endY)
-                path.close()
+                val path = Path().apply {
+                    moveTo((startX + endX) / 2, startY)
+                    lineTo(startX, endY)
+                    lineTo(endX, endY)
+                    close()
+                }
                 canvas.drawPath(path, drawPaint)
             }
+            Shape.FILL -> {
 
-            Shape.FILL -> TODO()
+            }
         }
     }
 
@@ -90,15 +90,12 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
-                when (currentShape) {
-                    Shape.FILL -> {
-                        fillArea(startX, startY)
-                        invalidate()
-                        return true
-                    }
-
-                    Shape.FREE_DRAW -> drawPath.moveTo(startX, startY)
-                    else -> {}
+                if (currentShape == Shape.FILL) {
+                    fillArea(startX, startY)
+                    invalidate()
+                    return true
+                } else if (currentShape == Shape.FREE_DRAW) {
+                    drawPath.moveTo(startX, startY)
                 }
             }
             MotionEvent.ACTION_MOVE -> {
@@ -127,25 +124,23 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
                 val radius = Math.hypot((endX - startX).toDouble(), (endY - startY).toDouble()).toFloat()
                 drawCanvas?.drawCircle(startX, startY, radius, drawPaint)
             }
-            Shape.RECTANGLE -> {
-                drawCanvas?.drawRect(startX, startY, endX, endY, drawPaint)
-            }
+            Shape.RECTANGLE -> drawCanvas?.drawRect(startX, startY, endX, endY, drawPaint)
             Shape.TRIANGLE -> {
-                val path = Path()
-                path.moveTo((startX + endX) / 2, startY)
-                path.lineTo(startX, endY)
-                path.lineTo(endX, endY)
-                path.close()
+                val path = Path().apply {
+                    moveTo((startX + endX) / 2, startY)
+                    lineTo(startX, endY)
+                    lineTo(endX, endY)
+                    close()
+                }
                 drawCanvas?.drawPath(path, drawPaint)
             }
             else -> return
         }
     }
-    private fun fillArea(x: Float, y: Float) {
 
+    private fun fillArea(x: Float, y: Float) {
         val startX = x.toInt()
         val startY = y.toInt()
-
 
         val targetColor = canvasBitmap?.getPixel(startX, startY) ?: return
         if (targetColor != currentColor) {
@@ -183,10 +178,7 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
 
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
     }
-    private fun fillScreen() {
-        drawCanvas?.drawColor(currentColor)
-        invalidate()
-    }
+
     fun setColor(newColor: Int) {
         currentColor = newColor
         drawPaint.color = currentColor
@@ -207,20 +199,26 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     }
 
     fun saveDrawing() {
-        val filePath = Environment.getExternalStorageDirectory().absolutePath + "/DrawingApp"
+        val filePath = context.getExternalFilesDir(null)?.absolutePath + "/DrawingApp"
         val dir = File(filePath)
         if (!dir.exists()) {
             dir.mkdirs()
         }
         val file = File(dir, "drawing_${System.currentTimeMillis()}.png")
         try {
-            val fos = FileOutputStream(file)
-            canvasBitmap?.compress(Bitmap.CompressFormat.PNG, 100, fos)
-            fos.flush()
-            fos.close()
-            Toast.makeText(context, "Drawing saved", Toast.LENGTH_SHORT).show()
+            FileOutputStream(file).use { fos ->
+                canvasBitmap?.compress(Bitmap.CompressFormat.PNG, 100, fos)
+                Toast.makeText(context, "Drawing saved", Toast.LENGTH_SHORT).show()
+            }
         } catch (e: IOException) {
             Toast.makeText(context, "Failed to save drawing", Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun fillScreen() {
+        drawCanvas?.drawColor(currentColor)
+        invalidate()
+    }
 }
+
+
