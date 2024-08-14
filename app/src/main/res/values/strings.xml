@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Drawing app</string>
+    <string name="triangle">Triangle</string>
+    <string name="rectangle">Rectangle</string>
+    <string name="circle">Circle</string>
+    <string name="save">Save</string>
+    <string name="clear">Clear</string>
+    <string name="fill">Fill</string>
 </resources>
